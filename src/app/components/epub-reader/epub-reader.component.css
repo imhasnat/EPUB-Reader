@@ -50,7 +50,12 @@
 .viewer {
   flex: 1;
   overflow: hidden !important;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+  touch-action: pan-y pinch-zoom;
 }
 
 button {

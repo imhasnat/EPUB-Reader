@@ -74,7 +74,6 @@ export class EpubReaderComponent {
 
       this.applyTheme();
       await this.rendition.display();
-      console.log('Display called for initial rendering');
       await this.book.locations.generate();
 
       this.rendition.on('relocated', (location: any) => {
@@ -86,6 +85,16 @@ export class EpubReaderComponent {
       console.error('Error initializing reader:', error);
       alert('Error initializing reader. Please try again.');
     }
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const epubContainer =
+        this.viewerContainer.nativeElement.querySelector('.epub-container');
+      if (epubContainer) {
+        epubContainer.style.overflow = 'hidden'; // Remove the scrollbar
+      }
+    }, 500);
   }
 
   navigateToChapter(event: Event) {
