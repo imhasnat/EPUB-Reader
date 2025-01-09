@@ -22,7 +22,6 @@ export class EpubReaderComponent {
   isDarkMode: boolean = false;
   currentScale: number = 100;
   tocVisible: boolean = true;
-  isSmallScreen: boolean = window.innerWidth <= 768;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,9 +68,9 @@ export class EpubReaderComponent {
 
       this.rendition = this.book.renderTo(this.viewerContainer.nativeElement, {
         allowScriptedContent: true,
-        flow: 'paginated',
         width: '100%',
-        spread: 'always',
+        flow: 'scrolled-doc',
+        // manager: 'continuous',
       });
 
       this.applyTheme();

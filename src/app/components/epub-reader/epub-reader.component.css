@@ -49,7 +49,7 @@
 
 .viewer {
   flex: 1;
-  /* overflow: auto; */
+  overflow: hidden !important;
   padding: 2rem;
 }
 

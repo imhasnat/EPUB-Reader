@@ -30,7 +30,7 @@
     <div class="controls-wrapper">
       <div class="chapter-selector">
         <select (change)="navigateToChapter($event)">
-          <option value="">Select Chapter</option>
+          <option value="">Table of Content</option>
           <option *ngFor="let item of toc" [value]="item.href">
             {{ item.label }}
           </option>
