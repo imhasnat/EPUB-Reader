@@ -1,20 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
-import { TocSidebarComponent } from '../toc-sidebar/toc-sidebar.component';
 import { ActivatedRoute } from '@angular/router';
 import { BOOKS } from '../../data/books';
 import ePub from 'epubjs';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-epub-reader',
-  imports: [CommonModule, ThemeToggleComponent, TocSidebarComponent],
+  imports: [CommonModule],
   templateUrl: './epub-reader.component.html',
   styleUrl: './epub-reader.component.css',
 })
 export class EpubReaderComponent {
   @ViewChild('viewerContainer') viewerContainer!: ElementRef;
 
+  isDarkMode$: any;
   book: any = null;
   rendition: any = null;
   toc: any[] = [];
@@ -24,7 +24,12 @@ export class EpubReaderComponent {
   tocVisible: boolean = true;
   isSmallScreen: boolean = window.innerWidth <= 768;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private themeService: ThemeService
+  ) {
+    this.isDarkMode$ = this.themeService.isDarkMode$;
+  }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -34,15 +39,6 @@ export class EpubReaderComponent {
         this.loadBook(book.filePath);
       }
     });
-
-    window.addEventListener('resize', this.updateScreenSize.bind(this));
-  }
-
-  updateScreenSize() {
-    this.isSmallScreen = window.innerWidth <= 768;
-    if (!this.isSmallScreen) {
-      this.tocVisible = true;
-    }
   }
 
   toggleToc(tocVisible: boolean) {
@@ -91,8 +87,10 @@ export class EpubReaderComponent {
     }
   }
 
-  navigateToChapter(href: string) {
-    if (this.rendition) {
+  navigateToChapter(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const href = select.value;
+    if (href && this.rendition) {
       this.rendition.display(href);
     }
   }
@@ -127,16 +125,24 @@ export class EpubReaderComponent {
   private applyTheme() {
     if (!this.rendition) return;
 
-    const theme = this.isDarkMode
-      ? {
-          body: { background: '#333', color: '#fff' },
-        }
-      : {
-          body: { background: '#fff', color: '#000' },
-        };
+    this.isDarkMode$.subscribe((isDark: boolean) => {
+      const theme = isDark
+        ? {
+            body: {
+              background: '#1a1a1a',
+              color: '#fff',
+            },
+          }
+        : {
+            body: {
+              background: '#fff',
+              color: '#000',
+            },
+          };
 
-    this.rendition.themes.register('theme', theme);
-    this.rendition.themes.select('theme');
+      this.rendition.themes.register('theme', theme);
+      this.rendition.themes.select('theme');
+    });
   }
 
   private applyZoom() {

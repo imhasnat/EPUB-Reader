@@ -1,0 +1,8 @@
+<nav [class.dark-mode]="isDarkMode$ | async">
+  <div class="nav-content">
+    <a routerLink="/" class="nav-brand"> 📚 eBook Reader </a>
+    <button class="theme-toggle" (click)="toggleTheme()">
+      {{ (isDarkMode$ | async) ? "☀️" : "🌙" }}
+    </button>
+  </div>
+</nav>

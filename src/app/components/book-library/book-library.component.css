@@ -4,9 +4,9 @@
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .book-card {
@@ -41,6 +41,7 @@
 .book-info h3 {
   margin: 0;
   font-size: 1.1rem;
+  color: #000;
 }
 
 .book-info p {
