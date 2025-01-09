@@ -14,6 +14,7 @@ import { ThemeService } from '../../services/theme.service';
 export class EpubReaderComponent {
   @ViewChild('viewerContainer') viewerContainer!: ElementRef;
 
+  private scrollPosition: number = 0;
   isDarkMode$: any;
   book: any = null;
   rendition: any = null;
@@ -37,6 +38,28 @@ export class EpubReaderComponent {
       if (book) {
         this.loadBook(book.filePath);
       }
+    });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const epubContainer =
+        this.viewerContainer.nativeElement.querySelector('.epub-container');
+      if (epubContainer) {
+        epubContainer.style.overflow = 'hidden'; // Remove the scrollbar
+      }
+    }, 500);
+
+    const viewerElement = this.viewerContainer.nativeElement;
+
+    // Save the scroll position on scroll events
+    viewerElement.addEventListener('scroll', () => {
+      this.scrollPosition = viewerElement.scrollTop;
+    });
+
+    // Restore the scroll position after rendering
+    this.rendition.on('displayed', () => {
+      viewerElement.scrollTop = this.scrollPosition;
     });
   }
 
@@ -76,6 +99,11 @@ export class EpubReaderComponent {
       await this.rendition.display();
       await this.book.locations.generate();
 
+      this.rendition.on('displayed', () => {
+        const viewerElement = this.viewerContainer.nativeElement;
+        viewerElement.scrollTop = this.scrollPosition;
+      });
+
       this.rendition.on('relocated', (location: any) => {
         if (!location.atStart && !location.atEnd) {
           this.progress = Math.floor((location.start.percentage || 0) * 100);
@@ -85,16 +113,6 @@ export class EpubReaderComponent {
       console.error('Error initializing reader:', error);
       alert('Error initializing reader. Please try again.');
     }
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const epubContainer =
-        this.viewerContainer.nativeElement.querySelector('.epub-container');
-      if (epubContainer) {
-        epubContainer.style.overflow = 'hidden'; // Remove the scrollbar
-      }
-    }, 500);
   }
 
   navigateToChapter(event: Event) {
