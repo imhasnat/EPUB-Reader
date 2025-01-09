@@ -1,0 +1,14 @@
+<div class="library-container">
+  <h1>My Library</h1>
+  <div class="books-grid">
+    <div *ngFor="let book of books" class="book-card" (click)="openBook(book)">
+      <div class="book-cover">
+        <img [src]="book.cover" [alt]="book.title" />
+      </div>
+      <div class="book-info">
+        <h3>{{ book.title }}</h3>
+        <p>{{ book.author }}</p>
+      </div>
+    </div>
+  </div>
+</div>

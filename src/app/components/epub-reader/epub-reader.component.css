@@ -1,0 +1,70 @@
+.reader-container {
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  background-color: #f4f4f4;
+  font-family: "Georgia", serif;
+}
+
+.reader-container.dark-mode {
+  background-color: #333;
+  color: #fff;
+}
+
+.controls {
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.reader-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.viewer {
+  width: 80%;
+  height: 90%;
+  border-radius: 8px;
+  position: relative;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.dark-mode button {
+  background: #444;
+  color: #fff;
+  border-color: #555;
+}
+
+.toggle-toc {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .reader-content {
+    flex-direction: column;
+  }
+
+  app-toc-sidebar {
+    display: none;
+  }
+
+  .viewer {
+    width: 100%;
+  }
+}

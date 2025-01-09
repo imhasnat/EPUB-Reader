@@ -1,0 +1,11 @@
+<div class="sidebar" [class.hidden]="!isTocVisible">
+  <h3>Table of Contents</h3>
+  <button class="close-btn" (click)="toggleToc()">Close</button>
+  <ul>
+    <li *ngFor="let item of toc">
+      <a href="#" (click)="onChapterClick($event, item.href)">
+        {{ item.label }}
+      </a>
+    </li>
+  </ul>
+</div>
