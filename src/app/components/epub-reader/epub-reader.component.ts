@@ -48,19 +48,19 @@ export class EpubReaderComponent {
       if (epubContainer) {
         epubContainer.style.overflow = 'hidden'; // Remove the scrollbar
       }
+
+      const viewerElement = this.viewerContainer.nativeElement;
+
+      // Save the scroll position on scroll events
+      viewerElement.addEventListener('scroll', () => {
+        this.scrollPosition = viewerElement.scrollTop;
+      });
+
+      // Restore the scroll position after rendering
+      this.rendition.on('displayed', () => {
+        viewerElement.scrollTop = this.scrollPosition;
+      });
     }, 500);
-
-    const viewerElement = this.viewerContainer.nativeElement;
-
-    // Save the scroll position on scroll events
-    viewerElement.addEventListener('scroll', () => {
-      this.scrollPosition = viewerElement.scrollTop;
-    });
-
-    // Restore the scroll position after rendering
-    this.rendition.on('displayed', () => {
-      viewerElement.scrollTop = this.scrollPosition;
-    });
   }
 
   toggleToc(tocVisible: boolean) {
@@ -99,10 +99,12 @@ export class EpubReaderComponent {
       await this.rendition.display();
       await this.book.locations.generate();
 
-      this.rendition.on('displayed', () => {
-        const viewerElement = this.viewerContainer.nativeElement;
-        viewerElement.scrollTop = this.scrollPosition;
-      });
+      if (this.rendition) {
+        this.rendition.on('displayed', () => {
+          const viewerElement = this.viewerContainer.nativeElement;
+          viewerElement.scrollTop = this.scrollPosition;
+        });
+      }
 
       this.rendition.on('relocated', (location: any) => {
         if (!location.atStart && !location.atEnd) {
