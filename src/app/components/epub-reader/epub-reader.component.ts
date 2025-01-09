@@ -70,15 +70,17 @@ export class EpubReaderComponent {
         allowScriptedContent: true,
         width: '100%',
         flow: 'scrolled-doc',
-        // manager: 'continuous',
       });
 
       this.applyTheme();
       await this.rendition.display();
+      console.log('Display called for initial rendering');
       await this.book.locations.generate();
 
       this.rendition.on('relocated', (location: any) => {
-        this.progress = Math.floor((location.start.percentage || 0) * 100);
+        if (!location.atStart && !location.atEnd) {
+          this.progress = Math.floor((location.start.percentage || 0) * 100);
+        }
       });
     } catch (error) {
       console.error('Error initializing reader:', error);

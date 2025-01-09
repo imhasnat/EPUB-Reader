@@ -1,30 +1,3 @@
-<!-- <div class="reader-container" [class.dark-mode]="isDarkMode">
-  <div class="controls">
-    <app-theme-toggle (themeChanged)="onThemeChange($event)"></app-theme-toggle>
-    <div class="navigation-controls">
-      <button (click)="previousPage()">Previous</button>
-      <span class="progress">{{ progress }}%</span>
-      <button (click)="nextPage()">Next</button>
-    </div>
-    <div class="zoom-controls">
-      <button (click)="zoomOut()">-</button>
-      <span>{{ currentScale }}%</span>
-      <button (click)="zoomIn()">+</button>
-    </div>
-  </div>
-
-  <div class="reader-content"> 
-    <app-toc-sidebar
-      *ngIf="tocVisible && toc.length"
-      [toc]="toc"
-      (chapterSelected)="navigateToChapter($event)"
-    >
-    </app-toc-sidebar>
-
-    <div #viewerContainer class="viewer"></div>
-  </div>
-</div> -->
-
 <div class="reader-container" [class.dark-mode]="isDarkMode$ | async">
   <div class="reader-controls">
     <div class="controls-wrapper">
