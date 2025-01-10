@@ -49,4 +49,4 @@ Start the application using npm:
 
 This will start the development server and make the application available in your web browser.
 
-Visit http://localhost:4200 in your browser to view the application. You should see the EPUB Reader interface, where you can upload and read EPUB files.
+Visit http://localhost:4200 in your browser to view the application. You should see the EPUB Reader interface, where you can read EPUB files.
