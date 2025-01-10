@@ -2,33 +2,30 @@
 .sidebar {
   width: 300px;
   padding: 1.5rem;
-  position: absolute;
-  top: 27%;
+  position: fixed;
+  top: 0%;
   left: 0;
   height: auto;
-  /* max-height: 70vh; */
   background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 0 8px 8px 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
   z-index: 1000;
+  max-height: 100vh;
 }
 
-/* Dark mode styles */
 .dark-mode .sidebar {
   background: #1f2937;
   color: #e5e7eb;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Hidden state */
 .sidebar.hidden {
   transform: translateX(-100%);
   opacity: 0;
 }
 
-/* Header section */
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -47,7 +44,6 @@
   color: #f3f4f6;
 }
 
-/* Divider */
 .divider {
   height: 1px;
   background: linear-gradient(
@@ -66,7 +62,6 @@
   );
 }
 
-/* Navigation */
 .toc-nav {
   margin-top: 1rem;
 }
@@ -107,7 +102,6 @@ li {
   color: #60a5fa;
 }
 
-/* Close button */
 .close-btn {
   background: transparent;
   border: none;
@@ -138,7 +132,6 @@ li {
   color: #9ca3af;
 }
 
-/* Open button */
 .open-btn {
   position: absolute;
   top: 18%;
@@ -179,7 +172,6 @@ li {
   font-weight: 500;
 }
 
-/* Scrollbar styling */
 .sidebar::-webkit-scrollbar {
   width: 6px;
 }

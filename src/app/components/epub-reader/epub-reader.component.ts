@@ -54,11 +54,13 @@ export class EpubReaderComponent implements OnDestroy {
   }
 
   ngAfterViewInit() {
-    const epubContainer =
-      this.viewerContainer.nativeElement.querySelector('.epub-container');
-    if (epubContainer) {
-      epubContainer.style.overflow = 'hidden';
-    }
+    setTimeout(() => {
+      const epubContainer =
+        this.viewerContainer.nativeElement.querySelector('.epub-container');
+      if (epubContainer) {
+        epubContainer.style.overflow = 'hidden';
+      }
+    }, 600);
   }
 
   ngOnDestroy() {
@@ -92,7 +94,6 @@ export class EpubReaderComponent implements OnDestroy {
 
       this.applyTheme();
 
-      // Generate locations
       await this.book.locations.generate();
       this.isLocationsGenerated = true;
 
@@ -116,15 +117,6 @@ export class EpubReaderComponent implements OnDestroy {
     }
   }
 
-  private async generateLocations() {
-    try {
-      await this.book.locations.generate();
-      this.updateProgress();
-    } catch (error) {
-      console.error('Error generating locations:', error);
-    }
-  }
-
   private updateProgress() {
     if (!this.rendition || !this.isLocationsGenerated) return;
 
@@ -140,7 +132,7 @@ export class EpubReaderComponent implements OnDestroy {
       localStorage.setItem(`book_${this.bookId}_location`, cfi);
     }
 
-    this.progressLoading = false; // Stop showing the loading indicator.
+    this.progressLoading = false;
   }
 
   navigateToChapter(href: string) {

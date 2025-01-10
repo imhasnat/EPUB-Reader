@@ -13,6 +13,11 @@
           <p *ngIf="progress !== null">Progress: {{ progress }}%</p>
         </ng-template>
       </div>
+      <div class="zoom-controls">
+        <button (click)="zoomOut()">-</button>
+        <span>{{ currentScale }}%</span>
+        <button (click)="zoomIn()">+</button>
+      </div>
     </div>
   </div>
 
@@ -35,9 +40,3 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="zoom-controls">
-      <button (click)="zoomOut()">-</button>
-      <span>{{ currentScale }}%</span>
-      <button (click)="zoomIn()">+</button>
-    </div> -->
