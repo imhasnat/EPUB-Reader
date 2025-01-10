@@ -4,10 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { BOOKS } from '../../data/books';
 import ePub from 'epubjs';
 import { ThemeService } from '../../services/theme.service';
+import { TocSidebarComponent } from '../toc-sidebar/toc-sidebar.component';
 
 @Component({
   selector: 'app-epub-reader',
-  imports: [CommonModule],
+  imports: [CommonModule, TocSidebarComponent],
   templateUrl: './epub-reader.component.html',
   styleUrl: './epub-reader.component.css',
 })
@@ -117,10 +118,8 @@ export class EpubReaderComponent {
     }
   }
 
-  navigateToChapter(event: Event) {
-    const select = event.target as HTMLSelectElement;
-    const href = select.value;
-    if (href && this.rendition) {
+  navigateToChapter(href: string) {
+    if (this.rendition) {
       this.rendition.display(href);
     }
   }

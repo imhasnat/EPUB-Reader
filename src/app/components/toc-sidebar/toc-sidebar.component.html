@@ -1,11 +1,29 @@
-<div class="sidebar" [class.hidden]="!isTocVisible">
-  <h3>Table of Contents</h3>
-  <button class="close-btn" (click)="toggleToc()">Close</button>
-  <ul>
-    <li *ngFor="let item of toc">
-      <a href="#" (click)="onChapterClick($event, item.href)">
-        {{ item.label }}
-      </a>
-    </li>
-  </ul>
+<div [class.dark-mode]="isDarkMode$ | async">
+  <button *ngIf="!isTocVisible" class="open-btn" (click)="toggleToc()">
+    <span class="menu-icon">☰</span>
+    <span class="btn-text">Contents</span>
+  </button>
+
+  <div class="sidebar" [class.hidden]="!isTocVisible">
+    <div class="sidebar-header">
+      <h3>Table of Contents</h3>
+      <button class="close-btn" (click)="toggleToc()">
+        <span class="close-icon">×</span>
+      </button>
+    </div>
+    <div class="divider"></div>
+    <nav class="toc-nav">
+      <ul>
+        <li *ngFor="let item of toc">
+          <a
+            href="#"
+            (click)="onChapterClick($event, item.href)"
+            class="toc-link"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>

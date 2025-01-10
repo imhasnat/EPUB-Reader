@@ -1,40 +1,26 @@
 <div class="reader-container" [class.dark-mode]="isDarkMode$ | async">
   <div class="reader-controls">
     <div class="controls-wrapper">
-      <div class="chapter-selector">
-        <select (change)="navigateToChapter($event)">
-          <option value="">Table of Content</option>
-          <option *ngFor="let item of toc" [value]="item.href">
-            {{ item.label }}
-          </option>
-        </select>
-      </div>
       <div class="navigation-controls">
         <button (click)="previousPage()">←</button>
         <button (click)="nextPage()">→</button>
       </div>
       <span class="progress">Progress: {{ progress }}%</span>
     </div>
-
-    <!-- <div class="zoom-controls">
-      <button (click)="zoomOut()">-</button>
-      <span>{{ currentScale }}%</span>
-      <button (click)="zoomIn()">+</button>
-    </div> -->
   </div>
 
-  <div #viewerContainer class="viewer"></div>
+  <div class="reader-content">
+    <app-toc-sidebar
+      *ngIf="toc.length"
+      [toc]="toc"
+      (chapterSelected)="navigateToChapter($event)"
+    >
+    </app-toc-sidebar>
+    <div #viewerContainer class="viewer"></div>
+  </div>
 
   <div class="bottom-controls">
     <div class="controls-wrapper">
-      <div class="chapter-selector">
-        <select (change)="navigateToChapter($event)">
-          <option value="">Select Chapter</option>
-          <option *ngFor="let item of toc" [value]="item.href">
-            {{ item.label }}
-          </option>
-        </select>
-      </div>
       <div class="navigation-controls">
         <button (click)="previousPage()">←</button>
         <button (click)="nextPage()">→</button>
@@ -42,3 +28,9 @@
     </div>
   </div>
 </div>
+
+<!-- <div class="zoom-controls">
+      <button (click)="zoomOut()">-</button>
+      <span>{{ currentScale }}%</span>
+      <button (click)="zoomIn()">+</button>
+    </div> -->
