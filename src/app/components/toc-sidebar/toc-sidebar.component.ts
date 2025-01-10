@@ -12,7 +12,7 @@ export class TocSidebarComponent {
   isDarkMode$: any;
   @Input() toc: any[] = [];
   @Output() chapterSelected = new EventEmitter<string>();
-  @Input() isTocVisible: boolean = true;
+  @Input() isTocVisible: boolean = false;
   @Output() tocToggled = new EventEmitter<boolean>();
 
   constructor(private themeService: ThemeService) {
