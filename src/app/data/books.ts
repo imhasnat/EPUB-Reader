@@ -3,24 +3,24 @@ import { Book } from '../models/book.model';
 export const BOOKS: Book[] = [
   {
     id: 1,
-    title: 'Pride and Prejudice',
-    author: 'Jane Austen',
-    cover: 'assets/images/austen-pride-and-prejudice.jpg',
-    filePath: 'assets/books/austen-pride-and-prejudice-illustrations.epub',
+    title: 'Five Fall Into Adventure',
+    author: 'Enid Blyton',
+    cover: 'assets/images/five-fall-into-adventure-ec5dbd.jpg',
+    filePath: 'assets/books/blyton-five-fall-into-adventure.epub',
   },
   {
     id: 2,
-    title: 'Brave New World',
-    author: 'Aldous Huxley',
-    cover: 'assets/images/brave-new-world-9a1ead.jpg',
+    title: 'Eugenics and Other Evils',
+    author: 'G.K. Chesterton',
+    cover: 'assets/images/chesterton-eugenics-and-other-evils.jpg',
     filePath: 'assets/books/chesterton-eugenics-and-other-evils.epub',
   },
   {
     id: 3,
-    title: 'Hawthorne House of the Seven Gables',
-    author: 'Nathaniel Hawthorne',
-    cover: 'assets/images/hawthorne-house-of-the-seven-gables.jpg',
-    filePath: 'assets/books/hawthorne-house-of-the-seven-gables.epub',
+    title: 'The Silver Chair',
+    author: 'C.S. Lewis',
+    cover: 'assets/images/the-silver-chair-4c5b8f.jpg',
+    filePath: 'assets/books/lewis-silver-chair.epub',
   },
   {
     id: 4,
@@ -35,5 +35,12 @@ export const BOOKS: Book[] = [
     author: 'Herman Cyril McNeile',
     cover: 'assets/images/the-saving-clause-52d111.jpg',
     filePath: 'assets/books/mcneile-saving-clause.epub',
+  },
+  {
+    id: 6,
+    title: 'Brave New World',
+    author: 'Aldous Huxley',
+    cover: 'assets/images/brave-new-world-9a1ead.jpg',
+    filePath: 'assets/books/brave-new-world.epub',
   },
 ];
