@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'epub-reader';
+  title = 'ebook-reader';
   isDarkMode$: any;
   constructor(private themeService: ThemeService) {
     this.isDarkMode$ = this.themeService.isDarkMode$;

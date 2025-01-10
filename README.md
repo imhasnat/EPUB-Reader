@@ -1,59 +1,52 @@
-# EpubReader
+# Angular EPUB Reader
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+## Features
 
-## Development server
+- **Load and Display EPUB Files**: Render EPUB files using `epub.js`.
+- **Navigate Chapters**: Access chapters via the Table of Contents (TOC) sidebar.
+- **Dark/Light Mode Toggle**: Switch between dark and light themes.
+- **Reading Progress Indicator**: Track reading progress, saved between sessions.
+- **Zoom Functionality**: Zoom in and out on text (50% - 200%).
+- **Resume Reading**: Resume from the last read page using localStorage.
 
-To start a local development server, run:
+## Installation
 
-```bash
-ng serve
-```
+Install my-project with npm
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Step 1: Clone the repository
+Clone the repository using Git:
 
 ```bash
-ng generate --help
+  git clone https://github.com/imhasnat/EPUB-Reader.git
 ```
 
-## Building
+This will download the entire repository to your local machine.
 
-To build the project run:
+Step 2: Navigate to the project directory
+Change into the project directory:
 
 ```bash
-ng build
+    cd EPUB Reader
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+This will move you into the directory where the project files are located.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Step 3: Install dependencies
+Install the required dependencies using npm:
 
 ```bash
-ng test
+    npm install
 ```
 
-## Running end-to-end tests
+This will download and install all the dependencies listed in the package.json file.
 
-For end-to-end (e2e) testing, run:
+Step 4: Start the application
+Start the application using npm:
 
 ```bash
-ng e2e
+    npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+This will start the development server and make the application available in your web browser.
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Visit http://localhost:4200 in your browser to view the application. You should see the EPUB Reader interface, where you can upload and read EPUB files.
