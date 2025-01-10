@@ -1,5 +1,7 @@
 # Angular EPUB Reader
 
+## Live URL: https://aquamarine-moonbeam-30931c.netlify.app/
+
 ## Features
 
 - **Load and Display EPUB Files**: Render EPUB files using `epub.js`.
