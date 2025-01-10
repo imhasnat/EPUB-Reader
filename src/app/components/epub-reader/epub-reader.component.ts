@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BOOKS } from '../../data/books';
 import ePub from 'epubjs';
 import { ThemeService } from '../../services/theme.service';
 import { TocSidebarComponent } from '../toc-sidebar/toc-sidebar.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-epub-reader',
@@ -12,18 +13,21 @@ import { TocSidebarComponent } from '../toc-sidebar/toc-sidebar.component';
   templateUrl: './epub-reader.component.html',
   styleUrl: './epub-reader.component.css',
 })
-export class EpubReaderComponent {
+export class EpubReaderComponent implements OnDestroy {
   @ViewChild('viewerContainer') viewerContainer!: ElementRef;
 
-  private scrollPosition: number = 0;
   isDarkMode$: any;
   book: any = null;
   rendition: any = null;
   toc: any[] = [];
-  progress: number = 0;
+  progress: number | null = null;
   isDarkMode: boolean = false;
   currentScale: number = 100;
-  tocVisible: boolean = true;
+  bookId: number = 0;
+  isLocationsGenerated: boolean = false;
+  progressLoading: boolean = true;
+
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -34,50 +38,40 @@ export class EpubReaderComponent {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      const bookId = params['id'];
-      const book = BOOKS.find((b) => b.id === +bookId);
+      this.bookId = +params['id'];
+      const book = BOOKS.find((b) => b.id === this.bookId);
       if (book) {
         this.loadBook(book.filePath);
       }
     });
+
+    this.subscriptions.add(
+      this.isDarkMode$.subscribe((isDark: boolean) => {
+        this.isDarkMode = isDark;
+        this.applyTheme();
+      })
+    );
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      const epubContainer =
-        this.viewerContainer.nativeElement.querySelector('.epub-container');
-      if (epubContainer) {
-        epubContainer.style.overflow = 'hidden'; // Remove the scrollbar
-      }
-
-      const viewerElement = this.viewerContainer.nativeElement;
-
-      // Save the scroll position on scroll events
-      viewerElement.addEventListener('scroll', () => {
-        this.scrollPosition = viewerElement.scrollTop;
-      });
-
-      // Restore the scroll position after rendering
-      this.rendition.on('displayed', () => {
-        viewerElement.scrollTop = this.scrollPosition;
-      });
-    }, 500);
+    const epubContainer =
+      this.viewerContainer.nativeElement.querySelector('.epub-container');
+    if (epubContainer) {
+      epubContainer.style.overflow = 'hidden';
+    }
   }
 
-  toggleToc(tocVisible: boolean) {
-    this.tocVisible = tocVisible;
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   async loadBook(filePath: string) {
     try {
       const response = await fetch(filePath);
       const bookBlob = await response.blob();
-
-      // Convert Blob to ArrayBuffer
       const bookData = await bookBlob.arrayBuffer();
-
-      // Pass the ArrayBuffer to ePub
       this.book = ePub(bookData);
+
       await this.initializeReader();
     } catch (error) {
       console.error('Error loading EPUB:', error);
@@ -97,25 +91,56 @@ export class EpubReaderComponent {
       });
 
       this.applyTheme();
-      await this.rendition.display();
-      await this.book.locations.generate();
 
-      if (this.rendition) {
-        this.rendition.on('displayed', () => {
-          const viewerElement = this.viewerContainer.nativeElement;
-          viewerElement.scrollTop = this.scrollPosition;
-        });
+      // Generate locations
+      await this.book.locations.generate();
+      this.isLocationsGenerated = true;
+
+      const savedLocation = localStorage.getItem(
+        `book_${this.bookId}_location`
+      );
+
+      if (savedLocation) {
+        await this.rendition.display(savedLocation);
+      } else {
+        await this.rendition.display();
       }
 
-      this.rendition.on('relocated', (location: any) => {
-        if (!location.atStart && !location.atEnd) {
-          this.progress = Math.floor((location.start.percentage || 0) * 100);
-        }
+      this.updateProgress();
+      this.rendition.on('relocated', () => {
+        this.updateProgress();
       });
     } catch (error) {
       console.error('Error initializing reader:', error);
       alert('Error initializing reader. Please try again.');
     }
+  }
+
+  private async generateLocations() {
+    try {
+      await this.book.locations.generate();
+      this.updateProgress();
+    } catch (error) {
+      console.error('Error generating locations:', error);
+    }
+  }
+
+  private updateProgress() {
+    if (!this.rendition || !this.isLocationsGenerated) return;
+
+    const currentLocation = this.rendition.currentLocation();
+    if (currentLocation && currentLocation.start) {
+      this.progress = Math.floor((currentLocation.start.percentage || 0) * 100);
+      const cfi = currentLocation.start.cfi;
+
+      localStorage.setItem(
+        `book_${this.bookId}_progress`,
+        this.progress.toString()
+      );
+      localStorage.setItem(`book_${this.bookId}_location`, cfi);
+    }
+
+    this.progressLoading = false; // Stop showing the loading indicator.
   }
 
   navigateToChapter(href: string) {
@@ -124,15 +149,15 @@ export class EpubReaderComponent {
     }
   }
 
-  nextPage() {
+  async nextPage() {
     if (this.rendition) {
-      this.rendition.next();
+      await this.rendition.next();
     }
   }
 
-  previousPage() {
+  async previousPage() {
     if (this.rendition) {
-      this.rendition.prev();
+      await this.rendition.prev();
     }
   }
 
@@ -146,32 +171,25 @@ export class EpubReaderComponent {
     this.applyZoom();
   }
 
-  onThemeChange(isDark: boolean) {
-    this.isDarkMode = isDark;
-    this.applyTheme();
-  }
-
   private applyTheme() {
     if (!this.rendition) return;
 
-    this.isDarkMode$.subscribe((isDark: boolean) => {
-      const theme = isDark
-        ? {
-            body: {
-              background: '#1a1a1a',
-              color: '#fff',
-            },
-          }
-        : {
-            body: {
-              background: '#fff',
-              color: '#000',
-            },
-          };
+    const theme = this.isDarkMode
+      ? {
+          body: {
+            background: '#1a1a1a',
+            color: '#fff',
+          },
+        }
+      : {
+          body: {
+            background: '#fff',
+            color: '#000',
+          },
+        };
 
-      this.rendition.themes.register('theme', theme);
-      this.rendition.themes.select('theme');
-    });
+    this.rendition.themes.register('theme', theme);
+    this.rendition.themes.select('theme');
   }
 
   private applyZoom() {

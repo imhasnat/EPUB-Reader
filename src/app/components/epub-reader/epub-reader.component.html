@@ -5,7 +5,14 @@
         <button (click)="previousPage()">←</button>
         <button (click)="nextPage()">→</button>
       </div>
-      <span class="progress">Progress: {{ progress }}%</span>
+      <div class="progress-container">
+        <ng-container *ngIf="progressLoading; else progressDisplay">
+          <p>Loading progress...</p>
+        </ng-container>
+        <ng-template #progressDisplay>
+          <p *ngIf="progress !== null">Progress: {{ progress }}%</p>
+        </ng-template>
+      </div>
     </div>
   </div>
 
